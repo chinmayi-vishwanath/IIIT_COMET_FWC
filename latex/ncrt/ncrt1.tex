@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+
+% ---------------- Packages ----------------
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\geometry{margin=1in}
+
+
+ubino
+
+% ---------------- Blue Heading ----------------
+\newcommand{\blueheading}[1]{%
+\begin{center}
+{\Large\bfseries\color{blue} #1}
+\end{center}
+}
+
+% ---------------- Light Blue Box ----------------
+\newtcolorbox{lightbluebox}{
+colback=blue!8,
+colframe=blue,
+boxrule=0.6pt,
+arc=1mm
+}
+
+\begin{document}
+
+% ================= EXERCISE 7.1 =================
+\blueheading{EXERCISE 7.1}
+
+\textbf{Find an anti-derivative (or integral) of the following functions by the method of inspection.}
+
+\begin{enumerate}[label=\textcolor{blue}{\arabic*.}]
+\item $\sin 2x$
+\item $\cos 3x$
+\item $e^{2x}$
+\item $(ax+b)^2$
+\item $\sin 2x-4e^{3x}$
+\end{enumerate}
+
+\textbf{Find the following integrals in Exercises 6 to 20.}
+
+\begin{enumerate}[label=\textcolor{blue}{\arabic*.}, start=6]
+\item $\int (4e^{3x}+1)\,dx$
+\item $\int x^2\left(1-\dfrac{1}{x^2}\right)\,dx$
+\item $\int (ax^2+bx+c)\,dx$
+\item $\int (2x^2+e^x)\,dx$
+\item $\int \left(\sqrt{x}-\dfrac{1}{\sqrt{x}}\right)^2\,dx$
+\item $\int \dfrac{x^3+5x^2-4}{x^2}\,dx$
+\item $\int \dfrac{x^3+3x+4}{\sqrt{x}}\,dx$
+\item $\int \dfrac{x^3-x^2+x-1}{x-1}\,dx$
+\item $\int (1-x)\sqrt{x}\,dx$
+\item $\int \sqrt{x}(3x^2+2x+3)\,dx$
+\item $\int (2x-3\cos x+e^x)\,dx$
+\item $\int (2x^2-3\sin x+5\sqrt{x})\,dx$
+\item $\int \sec x(\sec x+\tan x)\,dx$
+\item $\int \dfrac{\sec^2 x}{\csc^2 x}\,dx$
+\item $\int \dfrac{2-3\sin x}{\cos^2 x}\,dx$
+\end{enumerate}
+
+\newpage
+
+% ================= EXERCISE 7.2 =================
+\blueheading{EXERCISE 7.2}
+
+\textbf{Integrate the functions in Exercises 1 to 17.}
+
+\begin{enumerate}[label=\textcolor{blue}{\arabic*.}]
+\item $\dfrac{2x}{1+x^2}$
+\item $\dfrac{(\log x)^2}{x}$
+\item $\dfrac{1}{x+x\log x}$
+\item $\sin x(\sin x+\cos x)$
+\item $\sin(ax+b)\cos(ax+b)$
+\item $ax+b$
+\item $\sqrt{x}+2$
+\item $\sqrt{1+2x}$
+\item $4x+\sqrt{x^2+x+1}$
+\item $\dfrac{1}{\sqrt{1-x}}$
+\item $\dfrac{x}{\sqrt{x^2+4}},\; x>0$
+\item $(x^2+1)^{3/2}$
+\item $\dfrac{x^2}{2+3x^2}$
+\item $\log(x^2-x),\; x>0,\; x\neq1$
+\item $\dfrac{x}{9-4x^2}$
+\item $e^{2x+3}$
+\item $\dfrac{x}{e^x}$
+\end{enumerate}
+
+\newpage
+
+% ================= SUMMARY =================
+\blueheading{SUMMARY}
+
+\begin{lightbluebox}
+Integration is the inverse process of differentiation. In integral calculus, a function whose derivative is given is to be found.
+\end{lightbluebox}
+
+\begin{lightbluebox}
+If $F'(x)=f(x)$, then $\int f(x)\,dx = F(x)+C$, where $C$ is a constant of integration.
+\end{lightbluebox}
+
+\begin{lightbluebox}
+\textbf{Properties of Integrals:}
+\begin{enumerate}
+\item $\int [f(x)+g(x)]dx = \int f(x)dx + \int g(x)dx$
+\item $\int kf(x)dx = k\int f(x)dx$
+\end{enumerate}
+\end{lightbluebox}
+
+\begin{lightbluebox}
+\textbf{Some Standard Integrals:}  
+$\int e^x dx = e^x + C$,  
+$\int \sin x dx = -\cos x + C$,  
+$\int \cos x dx = \sin x + C$,  
+$\int \dfrac{1}{x}dx = \log|x| + C$.
+\end{lightbluebox}
+
+\begin{lightbluebox}
+\textbf{Integration by Parts:}  
+$\int u\,dv = uv - \int v\,du$.
+\end{lightbluebox}
+
+\end{document}
+
