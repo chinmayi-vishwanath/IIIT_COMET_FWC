@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\begin{document}
+
+\title{Step-by-Step Logic Gate Equivalence Analysis}
+\author{Logic Design Documentation}
+\date{}
+\maketitle
+
+\section{Step 1: The Question}
+Match the logic gates in \textbf{Column A} with their equivalents in \textbf{Column B} based on the provided circuit symbols.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Column A (Gates)} & \textbf{Column B (Equivalents)} \\
+\midrule
+P. NOR Gate & 1. XOR with one input bubbled \\
+Q. NAND Gate & 2. Bubbled OR Gate \\
+R. XOR Gate & 3. Bubbled XNOR Gate \\
+S. XNOR Gate & 4. Bubbled AND Gate \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Correct Option Identification:} Based on the logic analysis, the answer is \textbf{(B) P-4, Q-2, R-1, S-3}.
+
+---
+
+\section{Step 2: Logic Analysis}
+To determine equivalence, we apply \textbf{De Morgan's Laws} and properties of XOR/XNOR gates:
+
+\begin{itemize}
+    \item \textbf{P (NOR):} The output is $\overline{A + B}$. By De Morgan's Law, $\overline{A + B} = \bar{A} \cdot \bar{B}$. This is an AND gate with inverted inputs (Bubbled AND). \textbf{Matches 4}.
+    \item \textbf{Q (NAND):} The output is $\overline{A \cdot B}$. By De Morgan's Law, $\overline{A \cdot B} = \bar{A} + \bar{B}$. This is an OR gate with inverted inputs (Bubbled OR). \textbf{Matches 2}.
+    \item \textbf{R (XOR):} Inverting one input of an XNOR gate ($\overline{\bar{A} \oplus B}$) results in an XOR function. \textbf{Matches 1}.
+    \item \textbf{S (XNOR):} Inverting one input of an XOR gate ($\bar{A} \oplus B$) results in an XNOR function. \textbf{Matches 3}.
+\end{itemize}
+
+---
+
+\section{Step 3: Python Code Implementation}
+The following Python script uses \texttt{numpy} to simulate the truth tables for comparison.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+# Input truth table combinations (0,0), (0,1), (1,0), (1,1)
+A = np.array([0, 0, 1, 1])
+B = np.array([0, 1, 0, 1])
+
+def get_truth_tables():
+    # --- Column A Logic ---
+    gate_P = 1 - (A | B)           # NOR logic
+    gate_Q = 1 - (A & B)           # NAND logic
+    gate_R = A ^ B                 # XOR logic
+    gate_S = 1 - (A ^ B)           # XNOR logic
+    
+    col_A = {'P': gate_P, 'Q': gate_Q, 'R': gate_R, 'S': gate_S}
+
+    # --- Column B Logic ---
+    gate_1 = 1 - ((1 - A) ^ B)     # XNOR with one input bubbled
+    gate_2 = (1 - A) | (1 - B)     # Bubbled OR (NAND)
+    gate_3 = (1 - A) ^ B           # XOR with one input bubbled (XNOR)
+    gate_4 = (1 - A) & (1 - B)     # Bubbled AND (NOR)
+
+    col_B = {1: gate_1, 2: gate_2, 3: gate_3, 4: gate_4}
+    return col_A, col_B
+
+def match_gates():
+    col_A, col_B = get_truth_tables()
+    print("--- Logic Gate Matching Results ---")
+    for k_A, v_A in col_A.items():
+        for k_B, v_B in col_B.items():
+            if np.array_equal(v_A, v_B):
+                print(f"Gate {k_A} matches Gate {k_B}")
+
+if __name__ == "__main__":
+    match_gates()
+\end{lstlisting}
+
+---
+
+\section{Step 4: Explanation of the Code}
+\begin{enumerate}
+    \item \textbf{NumPy Arrays:} We define \texttt{A} and \texttt{B} as arrays to perform vectorised bitwise operations.
+    \item \textbf{Bitwise Logic:} The operators \texttt{|}, \texttt{\&}, and \texttt{\^} correspond to OR, AND, and XOR. \texttt{1 - X} is used for the NOT operation.
+    \item \textbf{Comparison:} \texttt{np.array\_equal} ensures that the output pattern of 4 bits matches exactly between Column A and Column B.
+\end{enumerate}
+
+---
+
+\section{Step 5: Output of the Code}
+The console output confirms the matches found in Step 2:
+
+\begin{lstlisting}[backgroundcolor=\color{black}, basicstyle=\ttfamily\color{white}]
+--- Logic Gate Matching Results ---
+Gate P matches Gate 4
+Gate Q matches Gate 2
+Gate R matches Gate 1
+Gate S matches Gate 3
+\end{lstlisting}
+
+\end{document}

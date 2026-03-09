@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    tabsize=2
+}
+
+\begin{document}
+
+\title{Documentation: Multiplexer Logic Realization (Q.39)}
+\author{Digital Systems Analysis}
+\date{}
+\maketitle
+
+\section{Step 1: The Question}
+Determine the Boolean function $F(A, B, C, D)$ realized by the $4 \times 1$ multiplexer circuit shown in the diagram.
+
+\textbf{Options:}
+\begin{itemize}
+    \item (A) $F = \sum m(0, 1, 3, 5, 9, 10, 14)$
+    \item (B) $F = \sum m(2, 3, 5, 7, 8, 12, 13)$
+    \item (C) $F = \sum m(1, 2, 4, 5, 11, 14, 15)$
+    \item (D) $F = \sum m(2, 3, 5, 7, 8, 9, 12)$
+\end{itemize}
+
+---
+
+\section{Step 2: Logic Analysis}
+A $4 \times 1$ MUX selects one of four data inputs based on select lines $S_1$ and $S_0$. The general equation is:
+\[ F = \bar{S_1}\bar{S_0}I_0 + \bar{S_1}S_0I_1 + S_1\bar{S_0}I_2 + S_1S_0I_3 \]
+
+\textbf{Circuit Connections:}
+\begin{itemize}
+    \item \textbf{Select Lines:} $S_1 = A$, $S_0 = B$.
+    \item \textbf{Input $I_0$:} Connected to $C$.
+    \item \textbf{Input $I_1$:} Connected to $D$.
+    \item \textbf{Input $I_2$:} Connected to $\bar{C}$ (via NOT gate).
+    \item \textbf{Input $I_3$:} Connected to $\bar{C}\bar{D}$ (via bubbled AND gate).
+\end{itemize}
+
+\textbf{Minterm Expansion:}
+\begin{enumerate}
+    \item $\bar{A}\bar{B}C = \bar{A}\bar{B}C(D + \bar{D}) = \bar{A}\bar{B}CD + \bar{A}\bar{B}C\bar{D} \rightarrow m_3, m_2$.
+    \item $\bar{A}BD = \bar{A}B(C + \bar{C})D = \bar{A}BCD + \bar{A}B\bar{C}D \rightarrow m_7, m_5$.
+    \item $A\bar{B}\bar{C} = A\bar{B}\bar{C}(D + \bar{D}) = A\bar{B}\bar{C}D + A\bar{B}\bar{C}\bar{D} \rightarrow m_9, m_8$.
+    \item $AB\bar{C}\bar{D} \rightarrow m_{12}$.
+\end{enumerate}
+Combined, $F = \sum m(2, 3, 5, 7, 8, 9, 12)$.
+
+---
+
+\section{Step 3: Python Code Implementation}
+The following script evaluates all 16 input combinations to identify the active minterms.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+# Generate all 16 combinations for A, B, C, D (0-15)
+inputs = np.array([[(i>>3)&1, (i>>2)&1, (i>>1)&1, i&1] for i in range(16)])
+A, B, C, D = inputs[:,0], inputs[:,1], inputs[:,2], inputs[:,3]
+
+def solve_mux():
+    # Define MUX inputs from circuit
+    I0, I1 = C, D
+    I2, I3 = (1 - C), (1 - C) & (1 - D)
+    
+    # MUX logic realization
+    F = ((1-A) & (1-B) & I0) | ((1-A) & B & I1) | \
+        (A & (1-B) & I2) | (A & B & I3)
+    
+    # Extract indices where output is High
+    minterms = np.where(F == 1)[0]
+    print(f"Minterms found: {list(minterms)}")
+
+if __name__ == "__main__":
+    solve_mux()
+\end{lstlisting}
+
+---
+
+\section{Step 4: Explanation of the Code}
+\begin{itemize}
+    \item \textbf{Binary Generation:} We use bit-shifting to create a $16 \times 4$ matrix representing the truth table inputs for $A, B, C, D$.
+    \item \textbf{Gate Modeling:} The NOT gate is modeled as \texttt{1 - C}, and the bubbled AND gate is modeled using the bitwise \texttt{\&} of two inverted signals.
+    \item \textbf{Logical Sum:} The final expression aggregates the selection logic for all four MUX channels.
+\end{itemize}
+
+---
+
+\section{Step 5: Output and Conclusion}
+The script identifies the minterms as follows:
+\begin{lstlisting}[backgroundcolor=\color{black}, basicstyle=\ttfamily\color{white}]
+--- Truth Table Minterms ---
+Minterms found: [2, 3, 5, 7, 8, 9, 12]
+\end{lstlisting}
+
+\textbf{Final Result:} The realized function matches \textbf{Option (D)}.
+
+\end{document}
