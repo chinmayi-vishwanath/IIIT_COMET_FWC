@@ -72,14 +72,13 @@ void handle_purchase() {
 
 void print_report() {
     // 4) Final report requirement
-    printf("\n================ REPORT ================\n");
+    printf("\n REPORT\n");
     printf("1) Closing stock: %d\n", stock);
     printf("2) No of sales: %d\n", num_sales);
     printf("3) No of items sold: %d\n", items_sold);
     printf("4) No of purchases: %d\n", num_purchases);
     printf("5) No of items purchased: %d\n", items_purchased);
     printf("6) No of customers visited: %d\n", customers_visited);
-    printf("========================================\n");
 }
 
 int main() {
